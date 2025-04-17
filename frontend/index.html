@@ -77,20 +77,14 @@
 <script src="https://unpkg.com/jszip@3.10.1/dist/jszip.min.js"></script>
 
 <script>
-       // Run the check as early as possible (in head)
-       if (localStorage.getItem("email")===null) {
-     // window.location.href = "signin.html";
-     document.body.style.display = "block";
-    } else {
-      // If authenticated, display the body
-      document.addEventListener('DOMContentLoaded', function() {
-        document.body.style.display = "block";
-      });
-    }
+    if (localStorage.getItem("email") === null) {
+    document.body.style.display = "block";
+  } else {
+    document.addEventListener("DOMContentLoaded", function () {
+      document.body.style.display = "block";
+    });
+  }
 
-
-
-    
   // Helper function to get current date in YYYY-MM-DD format
   function getCurrentDate() {
     const date = new Date();
@@ -117,9 +111,9 @@
   }
 
   // Step 3: Upload file metadata
-  function uploadMetadata(s3Key, filename, email) {
+  function uploadMetadata(fileId, filename, email) {
     const metadata = {
-      s3_filename: s3Key,
+      s3_filename: fileId,        // ← use file_id as s3_filename
       email: email,
       filename: filename,
       created_at: getCurrentDate()
@@ -134,52 +128,7 @@
     });
   }
 
-  // step4: 
-  // Function to handle compression (example for images using Compressor.js)
-  //const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-  function compressFile(file) {
-    return new Promise((resolve, reject) => {
-        const maxSizeInBytes = 2 * 1024 * 1024; // 5MB
-
-        if (file.size <= maxSizeInBytes) {
-            resolve(file); // No compression needed
-        } else if (file.type.startsWith("image/")) {
-            // Compress images with Compressor.js
-            new Compressor(file, {
-                quality: 0.6, // Adjust quality as needed
-                maxWidth: 1920,
-                maxHeight: 1920,
-                success(compressedFile) {
-                    resolve(compressedFile);
-                },
-                error(err) {
-                    reject(err);
-                },
-            });
-        } else {
-            // Compress non-image files with JSZip
-            console.log("Compressing non-image file");
-            const zip = new JSZip();
-            zip.file(file.name, file); // Add the file to a ZIP archive
-
-            zip.generateAsync({ type: "blob", compression: "DEFLATE", compressionOptions: { level: 6 } })
-                .then(compressedBlob => {
-                    // Create a new File object with a .zip extension
-                    const compressedFile = new File([compressedBlob], `${file.name}.zip`, {
-                        type: "application/zip",
-                        lastModified: file.lastModified,
-                    });
-                    resolve(compressedFile);
-                })
-                .catch(err => {
-                    reject(err);
-                });
-        }
-    });
-}
-
-
-  // Attach event listener
+  // Attach event listener for file upload
   document.querySelector("form").addEventListener("submit", function (e) {
     e.preventDefault();
 
@@ -191,60 +140,59 @@
       return;
     }
 
-    const email = localStorage.getItem("email"); // assuming email is saved in localStorage
-  //  const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+    if (file.size > maxSizeInBytes) {
+      alert("File size exceeds 5MB. Only files ≤ 5MB are supported.");
+      return;
+    }
 
-    compressFile(file)
-    .then((compressedFile) =>
-      getSignedUrl()
-        .then(({ url, file_id }) =>
-          uploadToS3(url, compressedFile).then(() => ({ file_id }))
-        )
-        .then(({ file_id }) =>
-          uploadMetadata(file_id, file.name, email)
-        )
-        .then(() => {
-          window.location.href = "myfiles.html";
-        })
-    )
-    .catch((err) => {
-      console.error(err);
-      alert("Something went wrong during upload.");
-    });
+    const email = localStorage.getItem("email");
+
+    getSignedUrl()
+      .then(({ url, file_id }) =>
+        uploadToS3(url, file).then(() => file_id)
+      )
+      .then(fileId =>
+        uploadMetadata(fileId, file.name, email)
+      )
+      .then(() => {
+        window.location.href = "myfiles.html";
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Something went wrong during upload.");
+      });
   });
 
- // Logout button event handler
- document.getElementById('logoutButton').addEventListener('click', function(e) {
-  e.preventDefault();
-  const accessToken = localStorage.getItem('access_token');
-  const idToken = localStorage.getItem('id_token');
+  // Logout button event handler
+  document.getElementById("logoutButton").addEventListener("click", function (e) {
+    e.preventDefault();
+    const accessToken = localStorage.getItem("access_token");
+    const idToken = localStorage.getItem("id_token");
 
-  fetch('/logout', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'X-Id-Token': idToken
-    }
-  })
-  .then((response) => {
-    if (response.status === 200) {
-      // Successful logout: clear tokens and redirect
-      localStorage.removeItem('email');
-      localStorage.removeItem('access_token');
-      localStorage.removeItem('id_token');
-      window.location.href = 'signin.html';
-    } else {
-      return response.text().then(err => {
-              throw new Error(err || "Something went wrong.");
-            });
-     // console.log('Logout failed with status:', response.status);
-    }
-  })
-  .catch((error) => {
-    console.error('Logout error:', error);
+    fetch("/logout", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${accessToken}`,
+        "X-Id-Token": idToken
+      }
+    })
+      .then(response => {
+        if (response.status === 200) {
+          localStorage.removeItem("email");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("id_token");
+          window.location.href = "signin.html";
+        } else {
+          return response.text().then(err => {
+            throw new Error(err || "Something went wrong.");
+          });
+        }
+      })
+      .catch(error => {
+        console.error("Logout error:", error);
+      });
   });
-});
-
 </script>
 
 
