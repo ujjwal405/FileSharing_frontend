@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-12/assets/css/login-12.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for the page */
+        }
+     
+        body { display: none; } 
+
+    </style>
+</head>
+<body>
+<script>
+ 
+ document.addEventListener('DOMContentLoaded', function() {
+      // Unhide the body once DOM is ready
+      document.body.style.display = 'block';
+
+      // Parse query parameters from the URL (code and state)
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get('code');
+      const state = urlParams.get('state');
+
+      // Redirect to signin.html if required parameters are missing
+      if (!code || !state) {
+        console.log("Missing code or state in URL.");
+        window.location.href = 'signin.html';
+        return;
+      }
+
+      // Construct the API endpoint URL with query parameters
+      const endpoint = `/api/auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
+
+      // Use fetch to call the API
+      fetch(endpoint)
+        .then(async (response) => {
+          const data = await response.json();
+
+          if (response.status === 200) {
+            // Expecting the API to return access_token and id_token
+            if (data.access_token && data.id_token) {
+              // Store tokens in localStorage
+              localStorage.setItem('email',data.email);
+              localStorage.setItem('access_token', data.access_token);
+              localStorage.setItem('id_token', data.id_token);
+              // Redirect to index.html
+              window.location.href = 'index.html';
+            } else {
+              console.error("Required tokens not found in the response.", data);
+              window.location.href = 'signin.html';
+            }
+          } else {
+            // For any other status, redirect to signin.html
+            console.error("API error:", data);
+            window.location.href = 'signin.html';
+          }
+        })
+        .catch((error) => {
+          console.log("Fetch error:", error);
+          window.location.href = 'signin.html';
+        });
+    });
+
+
+</script>
+
+
+
+
+</body>
+</html>

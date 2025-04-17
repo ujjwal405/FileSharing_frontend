@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignUp</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background for the page */
+        }
+    </style>
+</head>
+<body>
+
+<!-- Registration Section -->
+<section class="py-3 py-md-4 py-xl-5"> <!-- Adjusted padding classes -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="mb-5">
+                    <p class="text-center m-0">Already have an account? <a href="./signin.html" class="link-primary text-decoration-none">Sign in</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div class="row gy-5 justify-content-center">
+                    <div class="col-12 col-lg-5">
+                        <form>
+                            <div class="row gy-3 overflow-hidden">
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control border-0 border-bottom rounded-0" name="firstName" id="firstName" placeholder="First Name" required>
+                                        <label for="firstName" class="form-label">First Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="text" class="form-control border-0 border-bottom rounded-0" name="lastName" id="lastName" placeholder="Last Name" required>
+                                        <label for="lastName" class="form-label">Last Name</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="email" class="form-control border-0 border-bottom rounded-0" name="email" id="email" placeholder="name@example.com" required>
+                                        <label for="email" class="form-label">Email</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-floating mb-3">
+                                        <input type="password" class="form-control border-0 border-bottom rounded-0" name="password" id="password" value="" placeholder="Password" required>
+                                        <label for="password" class="form-label">Password</label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" name="iAgree" id="iAgree" required>
+                                        <label class="form-check-label text-secondary" for="iAgree">
+                                            I agree to the <a href="#!" class="link-primary text-decoration-none">terms and conditions</a>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="d-grid">
+                                        <button class="btn btn-primary btn-lg" type="submit">Sign up</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+              
+                </div> <!-- End of row gy-5 justify-content-center -->
+            </div> <!-- End of column -->
+        </div> <!-- End of row justify-content-center -->
+    </div> <!-- End of container -->
+</section>
+<!-- todo add input validation-->
+
+<!-- Bootstrap JS and dependencies (Popper.js) -->
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+        const passwordInput = document.getElementById("password");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+            const password = passwordInput.value.trim();
+            const firstName = document.getElementById("firstName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const errorDiv = document.getElementById("passwordError");
+
+            if (password.length < 6) {
+                if (!errorDiv) {
+                    // Create an error message if it doesn't exist
+                    const errorMessage = document.createElement("div");
+                    errorMessage.id = "passwordError";
+                    errorMessage.className = "text-danger mt-2";
+                    errorMessage.innerText = "Password must be at least 6 characters long.";
+                    passwordInput.parentNode.appendChild(errorMessage);
+                }
+            } else {
+                // Remove error message if password is valid
+               if (errorDiv) errorDiv.remove();
+            fetch('/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                email: email,
+                first_name: firstName,
+                last_name: lastName,
+                password: password
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then(errMsg => {
+                    throw new Error(errMsg);
+                });
+            }
+            //return response.json(); // or .text() depending on your backend response
+            localStorage.setItem("email", email);
+        })
+        .then(data => {
+            // Redirect to signin page or show success message
+            window.location.href = "signup_code_verification.html";
+        })
+        .catch(error => {
+            // Show error from backend in an error div
+            console.log(error);
+            const errorMessage = document.createElement("div");
+                    errorMessage.id = "passwordError";
+                    errorMessage.className = "text-danger mt-2";
+                    errorMessage.innerText = error;
+                    passwordInput.parentNode.appendChild(errorMessage);
+        });
+    
+            }
+        });
+    });
+</script>
+
+
+ 
+<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+<script src='https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.min.js'></script>
+
+</body>
+</html>
