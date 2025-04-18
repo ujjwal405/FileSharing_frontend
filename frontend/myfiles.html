@@ -378,26 +378,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const toast = bootstrap.Toast.getOrCreateInstance(toastElement);
 
     container.addEventListener('click', function(event) {
-        if (event.target.tagName === 'BUTTON' && event.target.classList.contains('btn-primary')) {
-            const id = event.target.dataset.id;
-            if (id) {
-                fetch(`/api/card/${id}/code`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const code = data.code;
-                        toastMessage.textContent = `Your code: ${code}`;
-                        toast.show();
-                    })
-                    .catch(error => {
-                        console.error('Error fetching code:', error);
-                        toastMessage.textContent = 'Failed to fetch code';
-                        toast.show();
-                    });
-            }
+    if (event.target.tagName === 'BUTTON' && event.target.classList.contains('btn-primary')) {
+        const id = event.target.dataset.id;
+        if (id) {
+            fetch('/api/card/code', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ key_id: id })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const code = data.code;
+                toastMessage.textContent = `Your code: ${code}`;
+                toast.show();
+            })
+            .catch(error => {
+                console.error('Error fetching code:', error);
+                toastMessage.textContent = 'Failed to fetch code';
+                toast.show();
+            });
         }
-    });
+    }
 });
-
+});
 
 </script>
 
