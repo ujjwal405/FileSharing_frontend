@@ -72,15 +72,15 @@
 <script>
 
 document.querySelector("form").addEventListener("submit", async (e) => {
-  e.preventDefault();
+    e.preventDefault();
   const code = document.getElementById("textInput").value;
   const errorDiv = document.getElementById('error');
   if (errorDiv) {
       errorDiv.textContent = '';
-    }
+  }
 
   try {
-    // 1) Ask your backend for the signed URL *and* the real filename
+    // 1) Ask backend for the signed URL
     const res = await fetch("https://your-backend.com/getSignedUrl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -88,8 +88,11 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     });
     if (!res.ok) throw new Error("Server rejected the code");
 
-    // <- Destructure both values
-    const { url: fileUrl, filename: realName } = await res.json();
+    const { url: fileUrl } = await res.json();
+
+    // Extract filename from S3 URL
+    const urlParts = fileUrl.split('?')[0].split('/');
+    const realName = urlParts[urlParts.length - 1];
 
     // 2) Download the file as a blob
     const fileRes = await fetch(fileUrl);
@@ -97,18 +100,18 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 
     const blob = await fileRes.blob();
 
-    // 3) Trigger browser “Save As…” using the real filename
+    // 3) Trigger download with original S3 filename
     const a = document.createElement("a");
-    a.href        = URL.createObjectURL(blob);
-    a.download    = realName;             // ← use the name from your backend
-    document.body.appendChild(a);         // (needed in some browsers)
+    a.href = URL.createObjectURL(blob);
+    a.download = realName;
+    document.body.appendChild(a);
     a.click();
     a.remove();
     URL.revokeObjectURL(a.href);
 
   } catch (err) {
     console.log(err.message);
-    errorDiv.textContent =  err.message;
+    errorDiv.textContent = err.message;
   }
 });
   </script>
