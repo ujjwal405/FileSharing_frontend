@@ -8,8 +8,8 @@ resource "aws_cloudfront_origin_access_control" "assign-oac" {
 
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
-    domain_name              = var.cdn-domain_name-and-origin_id
-    origin_id                = var.cdn-domain_name-and-origin_id
+    domain_name              = var.cdn_domain_name
+    origin_id                = var.cdn_origin_id
     origin_access_control_id = aws_cloudfront_origin_access_control.assign-oac.id
   }
 
@@ -18,7 +18,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     viewer_protocol_policy = "redirect-to-https"
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = var.cdn-domain_name-and-origin_id
+    target_origin_id       = var.cdn_origin_id
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
