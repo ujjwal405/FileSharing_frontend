@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Sharing</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Optional Bootstrap theme -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap-theme.min.css">
+
+    <style>
+
+.nav-link {
+            transition: transform 0.2s ease-in-out; /* Smooth transition */
+            transform-origin: center center; /* Ensures scaling from the center */
+        }
+
+        .nav-link:hover {
+            transform: scale(1.1); /* Slightly scales the link when hovered */
+            color: #ff6347;  /* Optional: Change color on hover */
+        }
+
+        /* Optional: Prevent navbar from shifting on small screens */
+        @media (max-width: 767px) {
+            .nav-link:hover {
+                transform: scale(1); /* Disable scaling on smaller screens */
+            }
+        }
+    body{
+        padding-bottom: 20px;
+    }
+      
+   
+
+    </style>
+</head>
+<body>
+
+<div class="container-fluid flex d-flex align-items-center"style="height: 100vh;">
+    <div class=" container-fluid d-flex justify-content-center align-items-center">
+        <div class="border p-4">
+            <div class=" d-flex flex-column">
+               <h5 class="align-self-center">For file download</h5>
+               <a href="download.html" class="card-link align-self-center">Click Here.</a>
+            </div>
+            <div class=" d-flex flex-column mt-2">
+                <h5 class="align-self-center">For Upload</h5>
+                <a href="signin.html" class="card-link align-self-center">Click Here.</a>
+             </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- jQuery and Popper.js (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+</body>
+</html>
