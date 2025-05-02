@@ -34,39 +34,32 @@
         return;
       }
 
-      // Construct the API endpoint URL with query parameters
-      const endpoint = `/api/auth/callback?code=${encodeURIComponent(code)}&state=${encodeURIComponent(state)}`;
+const payload = { code, state };
 
-      // Use fetch to call the API
-      fetch(endpoint)
-        .then(async (response) => {
-          const data = await response.json();
-
-          if (response.status === 200) {
-            // Expecting the API to return access_token and id_token
-            if (data.access_token && data.id_token) {
-              // Store tokens in localStorage
-              localStorage.setItem('email',data.email);
-              localStorage.setItem('access_token', data.access_token);
-              localStorage.setItem('id_token', data.id_token);
-              // Redirect to index.html
-              window.location.href = 'index.html';
-            } else {
-              console.error("Required tokens not found in the response.", data);
-              window.location.href = 'signin.html';
-            }
-          } else {
-            // For any other status, redirect to signin.html
-            console.error("API error:", data);
-            window.location.href = 'signin.html';
-          }
-        })
-        .catch((error) => {
-          console.log("Fetch error:", error);
-          window.location.href = 'signin.html';
-        });
-    });
-
+fetch('/api/auth/callback', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+})
+.then(async response => {
+  const data = await response.json();
+  if (response.ok && data.access_token && data.id_token) {
+    localStorage.setItem('email', data.email);
+    localStorage.setItem('access_token', data.access_token);
+    localStorage.setItem('id_token', data.id_token);
+    window.location.href = 'index.html';
+  } else {
+    console.error('Invalid response:', data);
+    window.location.href = 'signin.html';
+  }
+})
+.catch(err => {
+  console.error('Fetch error:', err);
+  window.location.href = 'signin.html';
+});
+ })
 
 </script>
 

@@ -81,7 +81,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 
   try {
     // 1) Ask backend for the signed URL
-    const res = await fetch("https://your-backend.com/getSignedUrl", {
+    const res = await fetch("https://your-backend.com/downloadSignedUrl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code })

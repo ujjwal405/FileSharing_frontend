@@ -78,7 +78,7 @@
 
 <script>
     if (localStorage.getItem("email") === null) {
-    document.body.style.display = "block";
+     window.location.href="access.html"
   } else {
     document.addEventListener("DOMContentLoaded", function () {
       document.body.style.display = "block";
@@ -104,7 +104,10 @@
   function uploadToS3(signedUrl, file) {
     return fetch(signedUrl, {
       method: "PUT",
-      body: file
+      body: file,
+      hdeaders:{
+        "Content-Type":"application/json"
+      }
     }).then(res => {
       if (!res.ok) throw new Error("Failed to upload to S3");
     });
@@ -118,10 +121,16 @@
       filename: filename,
       created_at: getCurrentDate()
     };
+    const accessToken = localStorage.getItem("access_token");
+    const idToken = localStorage.getItem("id_token");
 
-    return fetch("https://your-api-gateway-url/uploadmetadata", {
+    return fetch("https://your-api-gateway-url/uploadMetaData", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${accessToken}`,
+        "X-Id-Token": idToken
+       },
       body: JSON.stringify(metadata)
     }).then(res => {
       if (!res.ok) throw new Error("Failed to upload metadata");
@@ -173,6 +182,7 @@
     fetch("/logout", {
       method: "POST",
       headers: {
+        "Content-Type":"application/json",
         "Authorization": `Bearer ${accessToken}`,
         "X-Id-Token": idToken
       }

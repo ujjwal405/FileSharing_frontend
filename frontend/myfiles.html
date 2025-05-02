@@ -261,15 +261,34 @@ function showToast(message) {
 
 
 function loadPage(page) {
-/*fetch(`/api/data?page=${page}`)
-        .then(response => response.json())
-        .then(data => {
-            renderCards(data.data);
-            renderPagination(data.currentPage, data.totalPages);
-        })
-        .catch(error => {
-            console.error('Error fetching data:', error);
-        });
+/*
+ const accessToken = localStorage.getItem("access_token");
+    const idToken = localStorage.getItem("id_token");
+
+fetch('/api/myfiles', {
+  method: 'POST',                    // switch to POST
+  headers: {
+    "Content-Type": "application/json",  // tell the server it’s JSON
+    "Authorization": `Bearer ${accessToken}`,
+    "X-Id-Token": idToken
+  },
+  body: JSON.stringify({             // serialize your payload
+    page_no: page
+  })
+})
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+    return response.json();
+  })
+  .then(data => {
+    renderCards(data.data);
+    renderPagination(data.currentPage, data.totalPages);
+  })
+  .catch(error => {
+    console.error('Error fetching data:', error);
+  });
 
    */     
 
@@ -381,7 +400,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (event.target.tagName === 'BUTTON' && event.target.classList.contains('btn-primary')) {
         const id = event.target.dataset.id;
         if (id) {
-            fetch('/api/card/code', {
+            fetch('/api/card/getCode', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
