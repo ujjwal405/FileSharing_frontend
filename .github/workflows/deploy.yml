@@ -21,7 +21,7 @@ jobs:
     defaults:
       run:
         shell: bash
-        working-directory: terrafrom/
+        working-directory: terraform/
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
