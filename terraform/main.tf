@@ -30,8 +30,7 @@ module "cloudfront" {
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
   cdn_domain_name     = module.s3_static_website.bucket_regional_domain_name
-
-  # depends_on                    = [module.route53]
+  depends_on          = [module.s3_static_website]
 }
 
 # module "route53" {
@@ -57,5 +56,16 @@ module "s3_permission" {
   bucket_arn                  = module.s3_static_website.bucket_arn
   cloudfront_distribution_arn = module.cloudfront.cloudfront-arn
   depends_on                  = [module.cloudfront, module.s3_static_website]
+
+}
+
+
+module "cloudflare_record" {
+  source                     = "./modules/cloudflare"
+  cloudflare_zone_name       = var.cloudflare_zone_name
+  cloudflare_sub_domain_name = var.cloudflare_sub_domain_name
+  cloudflare_record_content  = module.cloudfront.cloudfront_domain_name
+  depends_on                 = [module.cloudfront]
+
 
 }

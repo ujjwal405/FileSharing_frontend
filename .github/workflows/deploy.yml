@@ -6,6 +6,8 @@ on:
         required: true
       AWS_REGION:
         required: true
+      CLOUDFLARE_API_TOKEN:
+        required: true
       
 
 permissions:
@@ -35,6 +37,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
           role-session-name: GitHub-OIDC-FileSharing-Frontend
           role-duration-seconds: 1800
+
+      - name: Set Terraform secrets as environment variables
+        run: |
+          echo "TF_VAR_cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" >> $GITHUB_ENV
+        
+
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
