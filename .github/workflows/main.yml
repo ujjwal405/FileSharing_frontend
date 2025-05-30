@@ -13,7 +13,7 @@ permissions:
 
 jobs:
   terraform-deploy:
-    uses: ./.github/workflows/terraform-destroy.yml
+    uses: ./.github/workflows/deploy.yml
     secrets: inherit
 
 
