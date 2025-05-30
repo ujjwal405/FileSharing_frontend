@@ -93,11 +93,23 @@
 
   // Step 1: Get signed URL
   function getSignedUrl() {
-    return fetch("https://your-api-gateway-url/uploadSignedUrl")
+    return fetch("https://api.ujjwalsilwal123.com.np/v1/uploadSignedUrl")
       .then(res => {
         if (!res.ok) throw new Error("Failed to get signed URL");
         return res.json();
-      });
+      })
+      .then(data => {
+      // ✅ If tokens are included, update localStorage
+      if (data.user_token) {
+        if (data.user_token.access_token) {
+          localStorage.setItem("access_token", data.user_token.access_token);
+        }
+        if (data.user_token.id_token) {
+          localStorage.setItem("id_token", data.user_token.id_token);
+        }
+      }
+      return data;
+    });
   }
 
   // Step 2: Upload file to S3
@@ -124,7 +136,7 @@
     const accessToken = localStorage.getItem("access_token");
     const idToken = localStorage.getItem("id_token");
 
-    return fetch("https://your-api-gateway-url/uploadMetaData", {
+    return fetch("https://api.ujjwalsilwal123.com.np/v1/uploadMetaData", {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
@@ -179,7 +191,7 @@
     const accessToken = localStorage.getItem("access_token");
     const idToken = localStorage.getItem("id_token");
 
-    fetch("/logout", {
+    fetch("https://api.ujjwalsilwal123.com.np/v1/logout", {
       method: "POST",
       headers: {
         "Content-Type":"application/json",

@@ -1,0 +1,63 @@
+name: "Terraform CD"
+on:
+  workflow_call:
+    secrets:
+      AWS_ROLE_ARN:
+        required: true
+      AWS_REGION:
+        required: true
+      
+
+permissions:
+  id-token: write
+  contents: read
+env:
+  TF_LOG: INFO
+  TF_INPUT: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: terrafrom/
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+     
+
+      - name: Configure AWS Credentials for AWS account
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+          role-session-name: GitHub-OIDC-FileSharing-Frontend
+          role-duration-seconds: 1800
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.11.0
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform init
+        id: init
+        run: terraform init
+
+      - name: Terraform validate
+        id: validate
+        run: terraform validate
+
+      - name: Terraform plan
+        id: plan
+        run: terraform plan -no-color
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve

@@ -138,7 +138,7 @@
     const user = { email, password };
 
     // Post the user data to your login endpoint (update '/login' to your API endpoint)
-    fetch('/signin', {
+    fetch('https://api.ujjwalsilwal123.com.np/v1/signin', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -181,7 +181,7 @@
     const errorDiv = document.getElementById('error');
   
     googleBtn.addEventListener('click', function () {
-      fetch('/googlesignin', {
+      fetch('https://api.ujjwalsilwal123.com.np/v1/signinGoogle', {
         method: 'GET',
       })
         .then(response => {

@@ -81,7 +81,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 
   try {
     // 1) Ask backend for the signed URL
-    const res = await fetch("https://your-backend.com/downloadSignedUrl", {
+    const res = await fetch("https://api.ujjwalsilwal123.com.np/v1/downloadSignedUrl", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ code })
@@ -92,7 +92,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
 
     // Extract filename from S3 URL
     const urlParts = fileUrl.split('?')[0].split('/');
-    const realName = urlParts[urlParts.length - 1];
+    const realName = decodeURIComponent(urlParts[urlParts.length - 1]);
 
     // 2) Download the file as a blob
     const fileRes = await fetch(fileUrl);

@@ -1,0 +1,58 @@
+name: "CICD Pipeline"
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - "!README.md"
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-deploy:
+    uses: ./.github/workflows/terraform-destroy.yml
+    secrets: inherit
+
+
+  # slack:
+    # needs: terraform-deploy
+    # runs-on: ubuntu-latest
+    # if: always()
+    # steps:
+    #   - name: Slack Notification
+    #     uses: act10ns/slack@v2
+    #     with:
+    #       channel: "#ci"
+    #       status: ${{ job.status }}
+    #       steps: ${{ toJson(needs) }}
+    #       webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  slack:
+    needs: [terraform-deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      # 1) Decide success vs failure in shell
+      - name: Determine overall CI status
+        id: get_status
+        run: |
+          echo "status=success" >> $GITHUB_OUTPUT
+
+          # if any needed job did _not_ succeed, flip to failure
+          if [[ "${{ needs.terraform-deploy.result }}" != "success" ]];then
+            echo "status=failure" >> $GITHUB_OUTPUT
+          fi
+
+      # 2) Pass that status into Slack
+      - name: Slack Notification
+        uses: act10ns/slack@v2
+        with:
+          channel: "#ci"
+          status: ${{ steps.get_status.outputs.status }}
+          steps: ${{ toJson(steps) }}
+          webhook-url: ${{ secrets.SLACK_WEBHOOK_URL }}
+          config: .github/config/slack.yml
+
