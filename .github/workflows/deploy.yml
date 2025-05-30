@@ -53,13 +53,13 @@ jobs:
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
-
-      - name: Terraform providers
-        run: terraform providers
         
       - name: Terraform init
         id: init
         run: terraform init
+
+      - name: Terraform providers
+        run: terraform providers
 
       - name: Terraform validate
         id: validate
