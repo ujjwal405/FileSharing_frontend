@@ -3,6 +3,7 @@ data "aws_cloudfront_cache_policy" "this" {
 }
 
 data "aws_acm_certificate" "this" {
+  provider    = aws.us_east_1
   domain      = var.domain_name
   statuses    = ["ISSUED"]
   most_recent = true
