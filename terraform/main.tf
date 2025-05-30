@@ -62,7 +62,7 @@ module "s3_permission" {
 
 module "cloudflare_record" {
   source                     = "./modules/cloudflare"
-  cloudflare_zone_name       = var.cloudflare_zone_name
+  cloudflare_zone_id         = var.cloudflare_zone_id
   cloudflare_sub_domain_name = var.cloudflare_sub_domain_name
   cloudflare_record_content  = module.cloudfront.cloudfront_domain_name
   depends_on                 = [module.cloudfront]

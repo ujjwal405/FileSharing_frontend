@@ -5,7 +5,6 @@ variable "aws_region" {
   default = "ap-south-1"
 }
 
-variable "cloudflare_email" {}
 variable "cloudflare_api_token" {}
-variable "cloudflare_zone_name" {}
+variable "cloudflare_zone_id" {}
 variable "cloudflare_sub_domain_name" {}

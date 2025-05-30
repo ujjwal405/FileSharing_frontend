@@ -8,6 +8,8 @@ on:
         required: true
       CLOUDFLARE_API_TOKEN:
         required: true
+      CLOUDFLARE_ZONE_ID:
+        required: true
       
 
 permissions:
@@ -41,6 +43,7 @@ jobs:
       - name: Set Terraform secrets as environment variables
         run: |
           echo "TF_VAR_cloudflare_api_token=${{ secrets.CLOUDFLARE_API_TOKEN }}" >> $GITHUB_ENV
+          echo "TF_VAR_cloudflare_zone_id=${{ secrets.CLOUDFLARE_ZONE_ID }}" >> $GITHUB_ENV
         
 
 

@@ -36,4 +36,5 @@ jobs:
       - name: Terraform destroy
         env:
           TF_VAR_cloudflare_api_token: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          TF_VAR_cloudflare_zone_id: ${{ secrets.CLOUDFLARE_ZONE_ID }}
         run: terraform destroy -auto-approve
