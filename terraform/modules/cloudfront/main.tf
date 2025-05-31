@@ -62,7 +62,7 @@ resource "aws_cloudfront_origin_request_policy" "this" {
   }
 
   headers_config {
-    header_behavior = "all"
+    header_behavior = "allViewer"
   }
 
   query_strings_config {
