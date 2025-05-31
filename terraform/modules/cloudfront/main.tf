@@ -62,7 +62,7 @@ resource "aws_cloudfront_origin_request_policy" "this" {
   }
 
   headers_config {
-    header_behavior = "none"
+    header_behavior = "all"
   }
 
   query_strings_config {
