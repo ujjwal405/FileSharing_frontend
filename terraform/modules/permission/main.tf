@@ -16,7 +16,7 @@ resource "aws_s3_bucket_policy" "this" {
         Resource = "${var.bucket_arn}/*"
         Condition = {
           StringEquals = {
-            "AWS:SourceArn" = "arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/${var.cloudfront_distribution_id}"
+            "AWS:SourceArn" = "${var.cloudfront_distribution_arn}"
           }
         }
       }

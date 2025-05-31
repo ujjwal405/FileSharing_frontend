@@ -1,4 +1,4 @@
-output "cloudfront-arn" {
+output "cloudfront_arn" {
   value = aws_cloudfront_distribution.cdn.arn
 }
 

@@ -52,11 +52,11 @@ module "cloudfront" {
 # }
 
 module "s3_permission" {
-  source                     = "./modules/permission"
-  bucket_id                  = module.s3_static_website.bucket_id
-  bucket_arn                 = module.s3_static_website.bucket_arn
-  cloudfront_distribution_id = module.cloudfront.cloudfront_distribution_id
-  depends_on                 = [module.cloudfront, module.s3_static_website]
+  source                      = "./modules/permission"
+  bucket_id                   = module.s3_static_website.bucket_id
+  bucket_arn                  = module.s3_static_website.bucket_arn
+  cloudfront_distribution_arn = module.cloudfront.cloudfront_arn
+  depends_on                  = [module.cloudfront, module.s3_static_website]
 
 }
 
