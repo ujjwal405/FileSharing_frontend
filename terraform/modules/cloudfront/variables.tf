@@ -43,9 +43,9 @@ variable "cdn_domain_name" {
   type = string
 }
 
-variable "cdn_origin_id"{
-  type= string
-  default="s3-origin-1"
+variable "cdn_origin_id" {
+  type    = string
+  default = "s3-origin-1"
 }
 
 variable "acm_certificate_arn" {

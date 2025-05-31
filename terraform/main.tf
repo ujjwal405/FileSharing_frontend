@@ -11,10 +11,10 @@ data "aws_acm_certificate" "this" {
 
 // creating s3 bucket for hosting static website
 module "s3_static_website" {
-  source             = "./modules/s3"
-  bucket_name        = var.s3_static_website
-  force_destroy      = true
-  index_document     = "index.html"
+  source        = "./modules/s3"
+  bucket_name   = var.s3_static_website
+  force_destroy = true
+  # index_document     = "index.html"
   frontend_directory = "frontend"
 }
 
