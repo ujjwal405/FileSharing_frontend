@@ -6,6 +6,12 @@ resource "aws_cloudfront_origin_access_control" "assign-oac" {
   signing_protocol                  = var.signing_protocol
 }
 
+
+
+
+
+
+
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
     domain_name              = var.cdn_domain_name
@@ -22,6 +28,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     min_ttl                = 0
     default_ttl            = 3600
     max_ttl                = 86400
+
 
     cache_policy_id          = var.cache_policy_id
     origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
