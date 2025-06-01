@@ -73,11 +73,9 @@ resource "aws_cloudfront_origin_request_policy" "this" {
 
 resource "null_resource" "cloudfront_invalidation" {
   triggers = {
-    s3_object_version = sha1(jsonencode([
-      for obj in aws_s3_object.this : "${obj.bucket}/${obj.key}:${obj.version_id}"
-    ]))
-    cloudfront_distribution_id = aws_cloudfront_distribution.cdn.id
+    always_run = timestamp()
   }
+
 
   provisioner "local-exec" {
     command = <<EOT
