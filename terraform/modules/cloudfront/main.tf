@@ -69,3 +69,23 @@ resource "aws_cloudfront_origin_request_policy" "this" {
     query_string_behavior = "all"
   }
 }
+
+
+resource "null_resource" "cloudfront_invalidation" {
+  triggers = {
+    s3_object_version = sha1(jsonencode([
+      for obj in aws_s3_object.this : "${obj.bucket}/${obj.key}:${obj.version_id}"
+    ]))
+    cloudfront_distribution_id = aws_cloudfront_distribution.cdn.id
+  }
+
+  provisioner "local-exec" {
+    command = <<EOT
+      aws cloudfront create-invalidation \
+        --distribution-id ${aws_cloudfront_distribution.cdn.id} \
+        --paths "/*"
+    EOT
+  }
+
+  depends_on = [aws_cloudfront_distribution.cdn]
+}

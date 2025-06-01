@@ -45,11 +45,11 @@ variable "restrict_public_buckets" {
 #   default     = ""
 # }
 
-variable "error_document" {
-  description = "The error document for the static website (can be empty)"
-  type        = string
-  default     = ""
-}
+# variable "error_document" {
+#   description = "The error document for the static website (can be empty)"
+#   type        = string
+#   default     = ""
+# }
 
 
 
