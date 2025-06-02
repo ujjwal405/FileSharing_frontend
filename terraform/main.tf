@@ -58,7 +58,7 @@ module "cloudfront" {
   domain_name         = var.domain_name
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
-  cdn_domain_name     = module.s3_static_website.bucket_regional_domain_name
+  cdn_domain_name     = module.s3_static_website.bucket_domain_name
   depends_on          = [module.s3_static_website]
 }
 
