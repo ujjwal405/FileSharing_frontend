@@ -11,11 +11,39 @@ data "aws_acm_certificate" "this" {
 
 // creating s3 bucket for hosting static website
 module "s3_static_website" {
-  source        = "./modules/s3"
-  bucket_name   = var.s3_static_website
-  force_destroy = true
+  source            = "./modules/s3"
+  bucket_name       = var.s3_static_website
+  force_destroy     = true
+  enable_logging    = true
+  logging_bucket_id = module.s3_static_website_logging.bucket_id
+
   # index_document     = "index.html"
+  # frontend_directory = "frontend"
+}
+
+
+module "s3_static_website_logging" {
+  source            = "./modules/s3"
+  bucket_name       = "${var.s3_static_website}-logging"
+  force_destroy     = true
+  enable_encryption = false
+}
+
+module "s3_static_website_object" {
+  source             = "./modules/s3Object"
+  bucket_id          = module.s3_static_website.bucket_id
   frontend_directory = "frontend"
+}
+
+
+
+
+//create bucket_acl for logging
+
+module "s3_logging_acl" {
+  source     = "./modules/acl"
+  bucket_id  = module.s3_static_website_logging.bucket_id
+  bucket_acl = "log-delivery-write"
 }
 
 

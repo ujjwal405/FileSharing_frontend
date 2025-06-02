@@ -17,7 +17,7 @@ resource "aws_cloudfront_distribution" "cdn" {
     domain_name              = var.cdn_domain_name
     origin_id                = var.cdn_origin_id
     origin_access_control_id = aws_cloudfront_origin_access_control.assign-oac.id
-    origin_path              = "/"
+
   }
 
   default_cache_behavior {

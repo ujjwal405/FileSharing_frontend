@@ -54,4 +54,19 @@ variable "restrict_public_buckets" {
 
 
 
-variable "frontend_directory" {}
+# variable "frontend_directory" {}
+
+variable "enable_encryption" {
+  description = "Whether to enable SSE encryption on the S3 bucket"
+  type        = bool
+  default     = true
+}
+
+variable "logging_bucket_id" {
+  default = null
+}
+
+variable "enable_logging" {
+  type    = bool
+  default = false
+}
