@@ -18,6 +18,12 @@ resource "aws_cloudfront_distribution" "cdn" {
     domain_name = var.cdn_domain_name
     origin_id   = var.cdn_origin_id
     # origin_access_control_id = aws_cloudfront_origin_access_control.assign-oac.id
+    custom_origin_config {
+      http_port              = 80
+      https_port             = 443
+      origin_protocol_policy = "http-only" # Static hosting only supports HTTP
+      origin_ssl_protocols   = ["TLSv1.2"]
+    }
 
   }
 
