@@ -11,16 +11,16 @@ data "aws_acm_certificate" "this" {
 
 // creating s3 bucket for hosting static website
 module "s3_static_website" {
-  source                  = "./modules/s3"
-  bucket_name             = var.s3_static_website
-  force_destroy           = true
-  enable_logging          = true
-  logging_bucket_id       = module.s3_static_website_logging.bucket_id
-  enable_website_hosting  = true
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  source                 = "./modules/s3"
+  bucket_name            = var.s3_static_website
+  force_destroy          = true
+  enable_logging         = true
+  logging_bucket_id      = module.s3_static_website_logging.bucket_id
+  enable_website_hosting = true
+  # block_public_acls       = true
+  # block_public_policy     = true
+  # ignore_public_acls      = true
+  # restrict_public_buckets = true
   # index_document     = "index.html"
   # frontend_directory = "frontend"
 }
@@ -112,15 +112,15 @@ module "cloudfront" {
 #   depends_on             = [module.cloudfront]
 # }
 
-module "s3_permission" {
-  source      = "./modules/permission"
-  bucket_name = module.s3_static_website.bucket_name
-  bucket_arn  = module.s3_static_website.bucket_arn
-  # cloudfront_distribution_arn= module.cloudfront.cloudfront_arn
-  cloudfront_distribution_id = module.cloudfront.cloudfront_distribution_id
-  depends_on                 = [module.cloudfront, module.s3_static_website]
+# module "s3_permission" {
+#   source      = "./modules/permission"
+#   bucket_name = module.s3_static_website.bucket_name
+#   bucket_arn  = module.s3_static_website.bucket_arn
+#   # cloudfront_distribution_arn= module.cloudfront.cloudfront_arn
+#   cloudfront_distribution_id = module.cloudfront.cloudfront_distribution_id
+#   depends_on                 = [module.cloudfront, module.s3_static_website]
 
-}
+# }
 
 
 module "cloudflare_record" {

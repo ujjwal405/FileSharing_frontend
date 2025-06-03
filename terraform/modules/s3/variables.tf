@@ -15,41 +15,41 @@ variable "force_destroy" {
 
 variable "block_public_acls" {
   type    = bool
-  default = true
+  default = false
 }
 
 
 variable "block_public_policy" {
   type    = bool
-  default = true
+  default = false
 }
 
 
 variable "ignore_public_acls" {
   type    = bool
-  default = true
+  default = false
 }
 
 
 variable "restrict_public_buckets" {
   type    = bool
-  default = true
+  default = false
 }
 
 
 
 
-variable "index_document" {
-  description = "The index document for the static website (can be empty)"
-  type        = string
-  default     = "index.html"
-}
+# variable "index_document" {
+#   description = "The index document for the static website (can be empty)"
+#   type        = string
+#   default     = "index.html"
+# }
 
-variable "error_document" {
-  description = "The error document for the static website (can be empty)"
-  type        = string
-  default     = ""
-}
+# variable "error_document" {
+#   description = "The error document for the static website (can be empty)"
+#   type        = string
+#   default     = ""
+# }
 
 
 
