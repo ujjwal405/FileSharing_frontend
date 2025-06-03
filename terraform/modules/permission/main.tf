@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {}
 
 
 resource "aws_s3_bucket_policy" "this" {
-  bucket = var.bucket_id
+  bucket = var.bucket_name
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [

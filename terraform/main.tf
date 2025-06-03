@@ -58,7 +58,7 @@ module "cloudfront" {
   domain_name         = var.domain_name
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
-  cdn_domain_name     = module.s3_static_website.bucket_domain_name
+  cdn_domain_name     = module.s3_static_website.bucket_regional_domain_name
   depends_on          = [module.s3_static_website]
 }
 
@@ -80,9 +80,9 @@ module "cloudfront" {
 # }
 
 module "s3_permission" {
-  source     = "./modules/permission"
-  bucket_id  = module.s3_static_website.bucket_id
-  bucket_arn = module.s3_static_website.bucket_arn
+  source      = "./modules/permission"
+  bucket_name = module.s3_static_website.bucket_name
+  bucket_arn  = module.s3_static_website.bucket_arn
   # cloudfront_distribution_arn= module.cloudfront.cloudfront_arn
   cloudfront_distribution_id = module.cloudfront.cloudfront_distribution_id
   depends_on                 = [module.cloudfront, module.s3_static_website]
