@@ -89,8 +89,8 @@ module "cloudfront" {
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
   cdn_domain_name     = module.s3_website_configuration.website_endpoint
-  log_bucket_name     = module.s3_cloudfront_logging.bucket_name
-  depends_on          = [module.s3_static_website]
+  # log_bucket_name     = module.s3_cloudfront_logging.bucket_name
+  depends_on = [module.s3_static_website]
 }
 
 
