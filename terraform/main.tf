@@ -32,7 +32,7 @@ module "s3_static_website_logging" {
 
 module "s3_cloudfront_logging" {
   source            = "./modules/s3"
-  bucket_name       = "cloudfront-logging"
+  bucket_name       = "fileshare-cloudfront-logging"
   force_destroy     = true
   enable_encryption = false
 }
