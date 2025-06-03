@@ -41,6 +41,14 @@ module "s3_cloudfront_logging" {
   enable_encryption = false
 }
 
+
+module "s3_website_configuration" {
+  source    = "./modules/s3Website"
+  bucket_id = module.s3_static_website.bucket_id
+
+}
+
+
 module "s3_static_website_object" {
   source             = "./modules/s3Object"
   bucket_id          = module.s3_static_website.bucket_id
@@ -79,7 +87,7 @@ module "cloudfront" {
   domain_name         = var.domain_name
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
-  cdn_domain_name     = module.s3_static_website.website_endpoint
+  cdn_domain_name     = module.s3_website_configuration.website_endpoint
   log_bucket_name     = module.s3_cloudfront_logging.bucket_name
   depends_on          = [module.s3_static_website]
 }

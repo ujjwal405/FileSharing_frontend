@@ -43,18 +43,18 @@ resource "aws_s3_bucket_logging" "this" {
 }
 
 
-resource "aws_s3_bucket_website_configuration" "this" {
-  count  = var.enable_website_hosting ? 1 : 0
-  bucket = aws_s3_bucket.this.id
+# resource "aws_s3_bucket_website_configuration" "this" {
+#   count  = var.enable_website_hosting ? 1 : 0
+#   bucket = aws_s3_bucket.this.id
 
-  index_document {
-    suffix = var.index_document
-  }
+#   index_document {
+#     suffix = var.index_document
+#   }
 
-  error_document {
-    key = var.error_document
-  }
-}
+#   error_document {
+#     key = var.error_document
+#   }
+# }
 
 
 # resource "aws_s3_object" "this" {
