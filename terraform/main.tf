@@ -28,7 +28,7 @@ module "s3_static_website" {
 
 module "s3_static_website_logging" {
   source            = "./modules/s3"
-  bucket_name       = "${var.s3_static_website}-logging"
+  bucket_name       = "${var.domain_name}-logging"
   force_destroy     = true
   enable_encryption = false
 }
