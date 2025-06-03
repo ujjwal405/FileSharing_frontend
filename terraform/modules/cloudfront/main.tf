@@ -1,6 +1,6 @@
-locals {
-  log_bucket_domain_name = "${var.log_bucket_name}.s3.amazonaws.com"
-}
+# locals {
+#   log_bucket_domain_name = "${var.log_bucket_name}.s3.amazonaws.com"
+# }
 
 
 
@@ -44,11 +44,11 @@ resource "aws_cloudfront_distribution" "cdn" {
 
 
 
-  logging_config {
-    bucket          = local.log_bucket_domain_name
-    include_cookies = false
-    prefix          = "cloudfront-logs/"
-  }
+  # logging_config {
+  #   bucket          = local.log_bucket_domain_name
+  #   include_cookies = false
+  #   prefix          = "cloudfront-logs/"
+  # }
 
 
   restrictions {

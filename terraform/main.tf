@@ -11,11 +11,11 @@ data "aws_acm_certificate" "this" {
 
 // creating s3 bucket for hosting static website
 module "s3_static_website" {
-  source                 = "./modules/s3"
-  bucket_name            = var.domain_name
-  force_destroy          = true
-  enable_logging         = true
-  logging_bucket_id      = module.s3_static_website_logging.bucket_id
+  source        = "./modules/s3"
+  bucket_name   = var.domain_name
+  force_destroy = true
+  # enable_logging         = false
+  # logging_bucket_id      = module.s3_static_website_logging.bucket_id
   enable_website_hosting = true
   # block_public_acls       = true
   # block_public_policy     = true
