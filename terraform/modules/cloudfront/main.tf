@@ -4,25 +4,20 @@ locals {
 
 
 
-resource "aws_cloudfront_origin_access_control" "assign-oac" {
-  name                              = var.oac-name
-  description                       = "An origin access control with s3 origin domain for cloudfront"
-  origin_access_control_origin_type = var.origin_access_control_origin_type
-  signing_behavior                  = var.signing_behavior
-  signing_protocol                  = var.signing_protocol
-}
-
-
-
-
-
+# resource "aws_cloudfront_origin_access_control" "assign-oac" {
+#   name                              = var.oac-name
+#   description                       = "An origin access control with s3 origin domain for cloudfront"
+#   origin_access_control_origin_type = var.origin_access_control_origin_type
+#   signing_behavior                  = var.signing_behavior
+#   signing_protocol                  = var.signing_protocol
+# }
 
 
 resource "aws_cloudfront_distribution" "cdn" {
   origin {
-    domain_name              = var.cdn_domain_name
-    origin_id                = var.cdn_origin_id
-    origin_access_control_id = aws_cloudfront_origin_access_control.assign-oac.id
+    domain_name = var.cdn_domain_name
+    origin_id   = var.cdn_origin_id
+    # origin_access_control_id = aws_cloudfront_origin_access_control.assign-oac.id
 
   }
 

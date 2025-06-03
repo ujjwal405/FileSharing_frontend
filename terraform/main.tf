@@ -11,12 +11,16 @@ data "aws_acm_certificate" "this" {
 
 // creating s3 bucket for hosting static website
 module "s3_static_website" {
-  source            = "./modules/s3"
-  bucket_name       = var.s3_static_website
-  force_destroy     = true
-  enable_logging    = true
-  logging_bucket_id = module.s3_static_website_logging.bucket_id
-
+  source                  = "./modules/s3"
+  bucket_name             = var.s3_static_website
+  force_destroy           = true
+  enable_logging          = true
+  logging_bucket_id       = module.s3_static_website_logging.bucket_id
+  enable_website_hosting  = true
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
   # index_document     = "index.html"
   # frontend_directory = "frontend"
 }
@@ -75,7 +79,7 @@ module "cloudfront" {
   domain_name         = var.domain_name
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
-  cdn_domain_name     = module.s3_static_website.bucket_regional_domain_name
+  cdn_domain_name     = module.s3_static_website.website_endpoint
   log_bucket_name     = module.s3_cloudfront_logging.bucket_name
   depends_on          = [module.s3_static_website]
 }

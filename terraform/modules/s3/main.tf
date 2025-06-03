@@ -43,17 +43,18 @@ resource "aws_s3_bucket_logging" "this" {
 }
 
 
-# resource "aws_s3_bucket_website_configuration" "this" {
-#   bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_website_configuration" "this" {
+  count  = var.enable_website_hosting ? 1 : 0
+  bucket = aws_s3_bucket.this.id
 
-#   index_document {
-#     suffix = var.index_document
-#   }
+  index_document {
+    suffix = var.index_document
+  }
 
-#   error_document {
-#     key = var.error_document
-#   }
-# }
+  error_document {
+    key = var.error_document
+  }
+}
 
 
 # resource "aws_s3_object" "this" {
@@ -65,5 +66,24 @@ resource "aws_s3_bucket_logging" "this" {
 #   content_type = lookup(local.mime_types, split(".", each.value)[1], "binary/octet-stream")
 
 # }
+
+
+resource "aws_s3_bucket_policy" "this" {
+  count  = var.enable_website_hosting ? 1 : 0
+  bucket = aws_s3_bucket.this.bucket
+  policy = jsonencode({
+    Version = "2012-10-17"
+    "Statement" : [
+      {
+        "Sid" : "PublicReadGetObject",
+        "Effect" : "Allow",
+        "Principal" : "*",
+        "Action" : "s3:GetObject",
+        "Resource" : "${aws_s3_bucket.this.arn}/*"
+      }
+    ]
+  })
+}
+
 
 

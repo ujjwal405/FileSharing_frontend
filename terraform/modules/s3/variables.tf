@@ -39,17 +39,17 @@ variable "restrict_public_buckets" {
 
 
 
-# variable "index_document" {
-#   description = "The index document for the static website (can be empty)"
-#   type        = string
-#   default     = ""
-# }
+variable "index_document" {
+  description = "The index document for the static website (can be empty)"
+  type        = string
+  default     = "index.html"
+}
 
-# variable "error_document" {
-#   description = "The error document for the static website (can be empty)"
-#   type        = string
-#   default     = ""
-# }
+variable "error_document" {
+  description = "The error document for the static website (can be empty)"
+  type        = string
+  default     = ""
+}
 
 
 
@@ -67,6 +67,12 @@ variable "logging_bucket_id" {
 }
 
 variable "enable_logging" {
+  type    = bool
+  default = false
+}
+
+
+variable "enable_website_hosting" {
   type    = bool
   default = false
 }
