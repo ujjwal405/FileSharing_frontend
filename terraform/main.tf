@@ -25,21 +25,21 @@ module "s3_static_website" {
   # frontend_directory = "frontend"
 }
 
+# // create logging bucket for website
+# module "s3_static_website_logging" {
+#   source            = "./modules/s3"
+#   bucket_name       = "${var.domain_name}-logging"
+#   force_destroy     = true
+#   enable_encryption = false
+# }
 
-module "s3_static_website_logging" {
-  source            = "./modules/s3"
-  bucket_name       = "${var.domain_name}-logging"
-  force_destroy     = true
-  enable_encryption = false
-}
-
-
-module "s3_cloudfront_logging" {
-  source            = "./modules/s3"
-  bucket_name       = "fileshare-cloudfront-logging"
-  force_destroy     = true
-  enable_encryption = false
-}
+# // create logging bucket for cloudfront
+# module "s3_cloudfront_logging" {
+#   source            = "./modules/s3"
+#   bucket_name       = "fileshare-cloudfront-logging"
+#   force_destroy     = true
+#   enable_encryption = false
+# }
 
 
 module "s3_website_configuration" {
@@ -60,19 +60,20 @@ module "s3_static_website_object" {
 
 //create bucket_acl for logging
 
-module "s3_logging_acl" {
-  source     = "./modules/acl"
-  bucket_id  = module.s3_static_website_logging.bucket_id
-  bucket_acl = "log-delivery-write"
-}
+# module "s3_logging_acl" {
+#   source     = "./modules/acl"
+#   bucket_id  = module.s3_static_website_logging.bucket_id
+#   bucket_acl = "log-delivery-write"
+# }
 
 
 
-module "s3_cloudfront_logging_acl" {
-  source     = "./modules/acl"
-  bucket_id  = module.s3_cloudfront_logging.bucket_id
-  bucket_acl = "log-delivery-write"
-}
+//create bucket_acl for logging
+# module "s3_cloudfront_logging_acl" {
+#   source     = "./modules/acl"
+#   bucket_id  = module.s3_cloudfront_logging.bucket_id
+#   bucket_acl = "log-delivery-write"
+# }
 
 
 
