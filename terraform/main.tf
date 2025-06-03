@@ -29,6 +29,14 @@ module "s3_static_website_logging" {
   enable_encryption = false
 }
 
+
+module "s3_cloudfront_logging" {
+  source            = "./modules/s3"
+  bucket_name       = "cloudfront-logging"
+  force_destroy     = true
+  enable_encryption = false
+}
+
 module "s3_static_website_object" {
   source             = "./modules/s3Object"
   bucket_id          = module.s3_static_website.bucket_id
@@ -47,6 +55,15 @@ module "s3_logging_acl" {
 }
 
 
+
+module "s3_cloudfront_logging_acl" {
+  source     = "./modules/acl"
+  bucket_id  = module.s3_cloudfront_logging.bucket_id
+  bucket_acl = "log-delivery-write"
+}
+
+
+
 # module "certificate" {
 #   source                    = "./modules/acm"
 #   certificate_domain        = var.certificate_domain
@@ -59,8 +76,12 @@ module "cloudfront" {
   cache_policy_id     = data.aws_cloudfront_cache_policy.this.id
   acm_certificate_arn = data.aws_acm_certificate.this.arn
   cdn_domain_name     = module.s3_static_website.bucket_regional_domain_name
+  log_bucket_name     = module.s3_cloudfront_logging.bucket_name
   depends_on          = [module.s3_static_website]
 }
+
+
+
 
 # module "route53" {
 #   source                    = "./modules/route53"

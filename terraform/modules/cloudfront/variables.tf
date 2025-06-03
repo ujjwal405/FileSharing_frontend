@@ -53,3 +53,6 @@ variable "acm_certificate_arn" {
 }
 
 variable "cache_policy_id" {}
+
+
+variable "log_bucket_name" {}

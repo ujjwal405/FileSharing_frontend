@@ -1,3 +1,9 @@
+locals {
+  log_bucket_domain_name = "${var.log_bucket_name}.s3.amazonaws.com"
+}
+
+
+
 resource "aws_cloudfront_origin_access_control" "assign-oac" {
   name                              = var.oac-name
   description                       = "An origin access control with s3 origin domain for cloudfront"
@@ -35,6 +41,15 @@ resource "aws_cloudfront_distribution" "cdn" {
     origin_request_policy_id = aws_cloudfront_origin_request_policy.this.id
   }
 
+
+
+  logging_config {
+    bucket          = local.log_bucket_domain_name
+    include_cookies = false
+    prefix          = "cloudfront-logs/"
+  }
+
+
   restrictions {
     geo_restriction {
       restriction_type = var.restriction_type
@@ -47,6 +62,8 @@ resource "aws_cloudfront_distribution" "cdn" {
     minimum_protocol_version       = "TLSv1.2_2021"
     cloudfront_default_certificate = false
   }
+
+
 
   enabled             = true
   is_ipv6_enabled     = true
